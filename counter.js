@@ -59,12 +59,24 @@ class Counter {
     }
 }
 
+function addCounter(divID, goal) {
+    countersDiv = document.getElementById("counters");
+    currentDiv = countersDiv.innerHTML;
+    countersDiv.innerHTML = currentDiv +  '<div id="' + divID + '" class="counter-wrapper"></div>';
+    new Counter(divID, goal);
+}
+
 function renderCounters() {
     for (let i = 0; i < counters.length; i++) {
         counters[i].render();
     }
 }
 
-onload = setInterval(renderCounters, 500);
-var counter1 = new Counter("counter1", new Date(2320, 2, 27, 18));
-var counter2 = new Counter("counter2", new Date(2019, 11, 27, 22, 22, 22));
+function init() {
+    setInterval(renderCounters, 500);
+    addCounter("counter-1", new Date(2320, 2, 27, 18));
+    addCounter("counter-2", new Date(2019, 11, 22, 22, 22));
+    renderCounters();
+}
+
+onload = init;

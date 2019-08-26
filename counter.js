@@ -1,8 +1,9 @@
 var counters = [];
 
 class Counter {
-    constructor(div, goal) {
-        this.div = div;
+    constructor(goal) {
+        const nextID = counters.length + 1;
+        this.div = "counter-" + nextID;
         this.goal = goal;
         this.start();
     }
@@ -59,11 +60,11 @@ class Counter {
     }
 }
 
-function addCounter(divID, goal) {
-    countersDiv = document.getElementById("counters");
-    currentDiv = countersDiv.innerHTML;
-    countersDiv.innerHTML = currentDiv +  '<div id="' + divID + '" class="counter-wrapper"></div>';
-    new Counter(divID, goal);
+function addCounter(goal) {
+    const countersDiv = document.getElementById("counters");
+    const currentDiv = countersDiv.innerHTML;
+    const added = new Counter(goal);
+    countersDiv.innerHTML = currentDiv +  '<div id="' + added.div + '" class="counter-wrapper"></div>';
 }
 
 function renderCounters() {
@@ -74,8 +75,8 @@ function renderCounters() {
 
 function init() {
     setInterval(renderCounters, 500);
-    addCounter("counter-1", new Date(2320, 2, 27, 18));
-    addCounter("counter-2", new Date(2019, 11, 22, 22, 22));
+    addCounter(new Date(2320, 2, 27, 18));
+    addCounter(new Date(2019, 11, 22, 22, 22));
     renderCounters();
 }
 

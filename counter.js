@@ -112,7 +112,6 @@ function LSSave() {
 function deleteCounter(divID) {
     for (let i = 0; i < counters.length; i++) {
         var candidate = counters[i];
-        console.log(candidate.div);
         if (candidate.div === divID) {
             candidate.delete();
         }

@@ -21,6 +21,11 @@ class Counter {
             counters.splice(index, 1);
         }
     }
+    delete() {
+        this.stop();
+        var container = document.getElementById(this.containerID);
+        container.remove();
+    }
     render() {
         const html = this.html(this.timeDifference(this.goal));
         const element = document.getElementById(this.div);
@@ -74,11 +79,17 @@ function addCounter(goal, title = null) {
         '<h3 class="counter-title" id="' + added.titleID + '">' + added.title + '</h3>' +
         '<div id="' + added.div + '" class="counter-wrapper"></div>' +
         '</div>';
+    return added;
 }
 
 function renderCounters() {
-    for (let i = 0; i < counters.length; i++) {
-        counters[i].render();
+    if (counters.length === 0) {
+        countersDiv = document.getElementById("counters");
+        countersDiv.innerHTML = 'No counters';
+    } else {
+        for (let i = 0; i < counters.length; i++) {
+            counters[i].render();
+        }
     }
 }
 

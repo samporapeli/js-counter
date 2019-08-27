@@ -6,6 +6,7 @@ class Counter {
         this.div = "counter-" + nextID;
         this.title = title === null ? "Counter " + nextID : title;
         this.titleID = this.div + "-title";
+        this.containerID = this.div + "-container";
         this.goal = goal;
         this.start();
     }
@@ -69,7 +70,7 @@ function addCounter(goal, title = null) {
     const currentDiv = countersDiv.innerHTML;
     const added = new Counter(goal, title);
     countersDiv.innerHTML = currentDiv + 
-        '<div class="full-counter-container">' +
+        '<div class="full-counter-container" id="' + added.containerID + '">' +
         '<h3 class="counter-title" id="' + added.titleID + '">' + added.title + '</h3>' +
         '<div id="' + added.div + '" class="counter-wrapper"></div>' +
         '</div>';

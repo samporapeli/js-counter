@@ -7,6 +7,7 @@ class Counter {
         this.title = title === null ? "Counter " + nextID : title;
         this.titleID = this.div + "-title";
         this.containerID = this.div + "-container";
+        this.removeID = this.div + "-remove";
         this.goal = goal;
         this.start();
     }
@@ -76,10 +77,24 @@ function addCounter(goal, title = null) {
     const added = new Counter(goal, title);
     countersDiv.innerHTML = currentDiv + 
         '<div class="full-counter-container" id="' + added.containerID + '">' +
+        '<div class="counter-titlebar">' +
         '<h3 class="counter-title" id="' + added.titleID + '">' + added.title + '</h3>' +
+        '<img class="counter-remove-icon" src="assets/ic_delete_24px.svg" alt="Delete this counter" title="Delete this counter" id="' + 
+        added.removeID + `" onclick="deleteCounter('` + added.div + `')">` +
+        '</div>' +
         '<div id="' + added.div + '" class="counter-wrapper"></div>' +
         '</div>';
     return added;
+}
+
+function deleteCounter(divID) {
+    for (let i = 0; i < counters.length; i++) {
+        var candidate = counters[i];
+        console.log(candidate.div);
+        if (candidate.div === divID) {
+            candidate.delete();
+        }
+    }
 }
 
 function renderCounters() {

@@ -137,7 +137,7 @@ function userAddCounter() {
     const timeElement = document.getElementById("new-counter-time");
     const title = titleElement.value == "" ? null : titleElement.value;
     const date = dateElement.value;
-    const time = timeElement.value;
+    const time = timeElement.value === "" ? "00:00" : timeElement.value;
     if (date == "") {
         messageElement.innerHTML = "Please input a goal date and time";
     } else {

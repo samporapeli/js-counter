@@ -46,22 +46,15 @@ class Counter {
         const counterDescription = '</div><div class="counter-description">';
         const closingDivs = '</div></div>';
         return (
-            counterBlock + this.zeroPadding(d) +
+            counterBlock + zeroPadding(d) +
             counterDescription + "days" +
-            closingDivs + counterBlock + this.zeroPadding(h) +
+            closingDivs + counterBlock + zeroPadding(h) +
             counterDescription + "hours" +
-            closingDivs + counterBlock + this.zeroPadding(m) +
+            closingDivs + counterBlock + zeroPadding(m) +
             counterDescription + "minutes" +
-            closingDivs + counterBlock + this.zeroPadding(s) + 
+            closingDivs + counterBlock + zeroPadding(s) + 
             counterDescription + "seconds" + closingDivs
         );
-    }
-    zeroPadding(i) {
-        if (i.toString().length == 1) {
-            return "0" + i;
-        } else {
-            return i;
-        }
     }
     timeDifference(goal) {
         var currentTime = new Date();
@@ -99,7 +92,7 @@ function deleteCounter(divID) {
 
 function renderCounters() {
     if (counters.length === 0) {
-        countersDiv = document.getElementById("counters");
+        var countersDiv = document.getElementById("counters");
         countersDiv.innerHTML = 'No counters';
     } else {
         for (let i = 0; i < counters.length; i++) {
@@ -108,10 +101,54 @@ function renderCounters() {
     }
 }
 
+function userAddCounter() {
+    const messageElement = document.getElementById("new-counter-message");
+    const titleElement = document.getElementById("new-counter-title");
+    const dateElement = document.getElementById("new-counter-date");
+    const timeElement = document.getElementById("new-counter-time");
+    const title = titleElement.value == "" ? null : titleElement.value;
+    const date = dateElement.value;
+    const time = timeElement.value;
+    if (date == "") {
+        messageElement.innerHTML = "Please input a goal date and time";
+    } else {
+        addCounter(new Date(date + "T" + time + minutesToTimezone(new Date().getTimezoneOffset())), title);
+        toggleCreateDialog("close");
+    }
+}
+
+function minutesToTimezone(initialMinutes) {
+    const sign = initialMinutes > 0 ? "-" : "+";
+    initialMinutes = Math.abs(initialMinutes);
+    const minutes = initialMinutes % 60;
+    const hours = Math.floor(initialMinutes / 60);
+    return sign + zeroPadding(hours) + ":" + zeroPadding(minutes);
+}
+
+function zeroPadding(i) {
+    if (i.toString().length == 1) {
+        return "0" + i;
+    } else {
+        return i;
+    }
+}
+
+function toggleCreateDialog(action) {
+    var dialog = document.getElementById("new-counter");
+    var icon = document.getElementById("create-icon");
+    dialog.style.display = action == "show" ? "grid" : "none";
+    icon.style.display = action == "show" ? "none" : "inline";
+
+}
+
 function init() {
     setInterval(renderCounters, 500);
+    var createIconElement = document.getElementById("create-icon");
+    var createCounterButton = document.getElementById("new-counter-add-button");
+    createIconElement.addEventListener("click", function() { toggleCreateDialog("show"); });
+    createCounterButton.addEventListener("click", userAddCounter);
     addCounter(new Date(2320, 2, 27, 18));
-    addCounter(new Date(2019, 11, 22, 22, 22));
+    addCounter(new Date(2019, 11, 22, 22, 22, 22));
     renderCounters();
 }
 

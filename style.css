@@ -12,3 +12,42 @@ a, a:visited {
     text-decoration: none;
     color: blue;
 }
+
+#create-icon {
+    margin-top: 2em;
+}
+
+#new-counter {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-row-gap: 0.2em;
+    grid-column-gap: 0.2em;
+    max-width: 30em;
+    margin: auto;
+}
+
+#new-counter-heading {
+    grid-column: 1 / 4;
+}
+
+#new-counter-title {
+    grid-column: 1 / 4;
+}
+
+#new-counter-date {
+    grid-column: 1 / 2;
+}
+
+#new-counter-time {
+    grid-column: 2 / 3;
+}
+
+#new-counter-button {
+    grid-column: 3 / 4;
+}
+
+#new-counter-message {
+    grid-column: 1 / 4;
+    color: red;
+}

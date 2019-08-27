@@ -1,10 +1,23 @@
-var counters = [];
+class App {
+    constructor() {
+        this.counters = [];
+    }
+    nextID() {
+        function getID(counter) {
+            return counter.id;
+        }
+        const greatest = Math.max.apply(null, this.counters.map(getID));
+        return isFinite(greatest) ? greatest + 1 : 1;
+    }
+}
+
+var app = new App();
 
 class Counter {
     constructor(goal, title = null) {
-        const nextID = counters.length + 1;
-        this.div = "counter-" + nextID;
-        this.title = title === null ? "Counter " + nextID : title;
+        this.id = app.nextID();
+        this.div = "counter-" + this.id;
+        this.title = title === null ? "Counter " + this.id : title;
         this.titleID = this.div + "-title";
         this.containerID = this.div + "-container";
         this.removeID = this.div + "-remove";
@@ -12,14 +25,14 @@ class Counter {
         this.start();
     }
     start() {
-        if (!counters.includes(this)) {
-            counters.push(this);
+        if (!app.counters.includes(this)) {
+            app.counters.push(this);
         }
     }
     stop() {
-        if (counters.includes(this)) {
-            const index = counters.indexOf(this);
-            counters.splice(index, 1);
+        if (app.counters.includes(this)) {
+            const index = app.counters.indexOf(this);
+            app.counters.splice(index, 1);
         }
     }
     delete() {
@@ -73,7 +86,7 @@ function addCounter(goal, title = null) {
         '<div class="counter-titlebar">' +
         '<h3 class="counter-title" id="' + added.titleID + '">' + added.title + '</h3>' +
         '<img class="counter-remove-icon" src="assets/ic_delete_24px.svg" alt="Delete this counter" title="Delete this counter" id="' + 
-        added.removeID + `" onclick="deleteCounter('` + added.div + `')">` +
+        added.removeID + `" onclick="deleteCounter(` + added.id + `)">` +
         '</div>' +
         '<div id="' + added.div + '" class="counter-wrapper"></div>' +
         '</div>';
@@ -86,8 +99,8 @@ function LSLoad() {
     if (data === null) {
         return false;
     }
-    while (counters.length > 0) {
-        counters[0].delete();
+    while (app.counters.length > 0) {
+        app.counters[0].delete();
     }
     var jsonData = JSON.parse(data);
     for (let i = 0; i < jsonData.length; i++) {
@@ -99,8 +112,8 @@ function LSLoad() {
 function LSSave() {
     var ls = window.localStorage;
     var result = [];
-    for (let i = 0; i < counters.length; i++) {
-        var current = counters[i];
+    for (let i = 0; i < app.counters.length; i++) {
+        var current = app.counters[i];
         result.push({
             goal: current.goal.toString(),
             title: current.title
@@ -109,22 +122,27 @@ function LSSave() {
     ls.setItem("counters", JSON.stringify(result));
 }
 
-function deleteCounter(divID) {
-    for (let i = 0; i < counters.length; i++) {
-        var candidate = counters[i];
-        if (candidate.div === divID) {
+function LSClear() {
+    window.localStorage.clear();
+}
+
+function deleteCounter(id) {
+    for (let i = 0; i < app.counters.length; i++) {
+        var candidate = app.counters[i];
+        if (candidate.id === id) {
             candidate.delete();
         }
     }
 }
 
 function renderCounters() {
-    if (counters.length === 0) {
+    if (app.counters.length === 0) {
         var countersDiv = document.getElementById("counters");
-        countersDiv.innerHTML = 'No counters';
+        countersDiv.innerHTML = 'No counters<br>' + 
+            '<button onclick="reset()">Restore factory settings</button>';
     } else {
-        for (let i = 0; i < counters.length; i++) {
-            counters[i].render();
+        for (let i = 0; i < app.counters.length; i++) {
+            app.counters[i].render();
         }
     }
     LSSave();
@@ -139,7 +157,7 @@ function userAddCounter() {
     const date = dateElement.value;
     const time = timeElement.value === "" ? "00:00" : timeElement.value;
     if (date == "") {
-        messageElement.innerHTML = "Please input a goal date and time";
+        messageElement.innerHTML = "Please input a goal date";
     } else {
         addCounter(new Date(date + "T" + time + minutesToTimezone(new Date().getTimezoneOffset())), title);
         toggleCreateDialog("close");
@@ -168,6 +186,11 @@ function toggleCreateDialog(action) {
     dialog.style.display = action == "show" ? "grid" : "none";
     icon.style.display = action == "show" ? "none" : "inline";
 
+}
+
+function reset() {
+    LSClear();
+    location.reload();
 }
 
 function init() {

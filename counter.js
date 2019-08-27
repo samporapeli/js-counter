@@ -178,7 +178,7 @@ function init() {
     createCounterButton.addEventListener("click", userAddCounter);
     if (!LSLoad()) {
         addCounter(new Date(2020, 0, 1), "New Year 2020");
-        addCounter(new Date(2126, 9, 16, 13, 14, 15), "Next total eclipse in Finland");
+        addCounter(new Date(2126, 9, 16, 13, 14, 15), "Next total solar eclipse in Finland");
     }
     renderCounters();
 }

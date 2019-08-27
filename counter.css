@@ -53,3 +53,13 @@
 .counter-description {
   font-size: 0.8em;
 }
+
+@media only screen and (max-width: 45em) {
+  .full-counter-container {
+    font-size: 0.45em;
+  }
+  img {
+    width: 2em;
+    height: auto;
+  }
+}

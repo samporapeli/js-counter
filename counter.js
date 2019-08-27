@@ -80,6 +80,35 @@ function addCounter(goal, title = null) {
     return added;
 }
 
+function LSLoad() {
+    var ls = window.localStorage;
+    var data = ls.getItem("counters");
+    if (data === null) {
+        return false;
+    }
+    while (counters.length > 0) {
+        counters[0].delete();
+    }
+    var jsonData = JSON.parse(data);
+    for (let i = 0; i < jsonData.length; i++) {
+        addCounter(new Date(jsonData[i].goal), jsonData[i].title);
+    }
+    return true;
+}
+
+function LSSave() {
+    var ls = window.localStorage;
+    var result = [];
+    for (let i = 0; i < counters.length; i++) {
+        var current = counters[i];
+        result.push({
+            goal: current.goal.toString(),
+            title: current.title
+        });
+    }
+    ls.setItem("counters", JSON.stringify(result));
+}
+
 function deleteCounter(divID) {
     for (let i = 0; i < counters.length; i++) {
         var candidate = counters[i];
@@ -99,6 +128,7 @@ function renderCounters() {
             counters[i].render();
         }
     }
+    LSSave();
 }
 
 function userAddCounter() {
@@ -147,8 +177,10 @@ function init() {
     var createCounterButton = document.getElementById("new-counter-add-button");
     createIconElement.addEventListener("click", function() { toggleCreateDialog("show"); });
     createCounterButton.addEventListener("click", userAddCounter);
-    addCounter(new Date(2320, 2, 27, 18));
-    addCounter(new Date(2019, 11, 22, 22, 22, 22));
+    if (!LSLoad()) {
+        addCounter(new Date(2020, 0, 1), "New Year 2020");
+        addCounter(new Date(2126, 9, 16, 13, 14, 15), "Next total eclipse in Finland");
+    }
     renderCounters();
 }
 

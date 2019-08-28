@@ -181,11 +181,33 @@ function zeroPadding(i) {
 }
 
 function toggleCreateDialog(action) {
+    setCreateCounterDefaults();
     var dialog = document.getElementById("new-counter");
     var icon = document.getElementById("create-icon");
     dialog.style.display = action == "show" ? "grid" : "none";
     icon.style.display = action == "show" ? "none" : "inline";
+}
 
+function yyyymmddString(date) {
+    const year = date.getFullYear();
+    const month = zeroPadding(date.getMonth() + 1);
+    const day = zeroPadding(date.getDate());
+    return [year, month, day].join("-");
+}
+
+function hhmmString(date) {
+    const hours = zeroPadding(date.getHours());
+    const minutes = zeroPadding(date.getMinutes());
+    return [hours, minutes].join(":");
+}
+
+function setCreateCounterDefaults() {
+    const creationDateElement = document.getElementById("new-counter-date");
+    const creationTimeElement = document.getElementById("new-counter-time");
+    var oneHourAhead = new Date();
+    oneHourAhead.setHours(oneHourAhead.getHours() + 1);
+    creationDateElement.value = yyyymmddString(oneHourAhead);
+    creationTimeElement.value = hhmmString(oneHourAhead);
 }
 
 function reset() {
